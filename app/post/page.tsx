@@ -9,7 +9,6 @@ import AddSvg from "@/public/add.svg";
 import {
   Card,
   CardHeader,
-  CardBody,
   CardFooter,
   Button,
   Divider,
@@ -45,7 +44,7 @@ export default function Posts() {
         </Button>
       </section>
       <Divider className="my-4" />
-      <section className="grid grid-cols-4 gap-4">
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {data!.map((post: IPostModel) => (
           <Card shadow="sm" key={post.id}>
             <CardHeader>
