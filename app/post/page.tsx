@@ -1,10 +1,8 @@
 "use client";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getPostData } from "./services/post-api.service";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createNewPost, getPostData } from "./services/post-api.service";
 import NextImage from "next/image";
 import styles from "./styles.module.css";
-import EditSvg from "@/public/edit.svg";
-import type { PressEvent } from "@react-types/shared";
 import VisibilitySvg from "@/public/visibility.svg";
 import AddSvg from "@/public/add.svg";
 import {
@@ -19,18 +17,25 @@ import {
 } from "@nextui-org/react";
 import { IPostModel } from "./models/i-post.model";
 import PostModal from "./postModal";
-import { useState } from "react";
-import { IPostModalValueModel } from "./models/i-post-modal-value.model";
+import { toast } from "react-toastify";
 
 export default function Posts() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const queryClient = useQueryClient()
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["posts"],
     queryFn: getPostData,
   });
 
-  const modalValueHandler = (values: IPostModalValueModel) => {
-    debugger;
+  const mutation = useMutation({
+    mutationFn: createNewPost,
+    onSuccess: () => {
+      toast.success('Mission accomplished');
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
+  })
+  const modalValueHandler = (values: IPostModel) => {
+    mutation.mutate(values)
   };
 
   if (isLoading) {
