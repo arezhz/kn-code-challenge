@@ -1,7 +1,10 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import { getPost } from "../services/post-api.service";
-import { Divider } from "@nextui-org/react";
+import { Button, Image, Divider, Link } from "@nextui-org/react";
+import ArrowBackSvg from "@/public/arrow_back.svg";
+import NextImage from "next/image";
+
 export default function PostDetails({ params }: { params: { slug: string } }) {
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["postDetails"],
@@ -16,7 +19,25 @@ export default function PostDetails({ params }: { params: { slug: string } }) {
   return (
     <>
       <section className="max-w-4xl m-auto">
-        <h1>{data?.title}</h1>
+        <div className="flex justify-between items-center">
+          <h1>{data?.title}</h1>
+          <Button
+            href={`/post`}
+            as={Link}
+            color="secondary"
+            isIconOnly
+            variant="bordered"
+          >
+            <Image
+              as={NextImage}
+              alt="nextui logo"
+              height={24}
+              radius="sm"
+              src={ArrowBackSvg.src}
+              width={24}
+            />
+          </Button>
+        </div>
         <Divider className="my-4" />
         <p>{data?.body}</p>
       </section>
