@@ -1,7 +1,8 @@
 import { IPostModel } from "../models/i-post.model";
 import ApiService from "@/api";
+
 export async function getPostData(): Promise<IPostModel[]> {
-  const url = "posts";
+  const url = "postasdsads";
   return await ApiService.Get(url);
 }
 
