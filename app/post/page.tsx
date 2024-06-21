@@ -23,23 +23,11 @@ import { useState } from "react";
 import { IPostModalValueModel } from "./models/i-post-modal-value.model";
 
 export default function Posts() {
-  const [modalTitle, setModalTitle] = useState<string>("");
-  const [modalValue, setModalValue] = useState<IPostModel>();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["posts"],
     queryFn: getPostData,
   });
-
-  const openModalHandler = (
-    e: PressEvent,
-    editMode = false,
-    post?: IPostModel
-  ) => {
-    setModalTitle(editMode ? "Edit Post" : "New Post");
-    setModalValue(post || undefined);
-    onOpen();
-  };
 
   const modalValueHandler = (values: IPostModalValueModel) => {
     debugger;
@@ -59,7 +47,7 @@ export default function Posts() {
           color="primary"
           isIconOnly
           variant="solid"
-          onPress={openModalHandler}
+          onPress={onOpen}
         >
           <Image
             as={NextImage}
@@ -84,22 +72,6 @@ export default function Posts() {
 
             <CardFooter className="flex gap-1 justify-end">
               <Button
-                color="secondary"
-                variant="bordered"
-                isIconOnly
-                aria-label="edit"
-                onPress={(e) => openModalHandler(e, true, post)}
-              >
-                <Image
-                  as={NextImage}
-                  alt="nextui logo"
-                  height={24}
-                  radius="sm"
-                  src={EditSvg.src}
-                  width={24}
-                />
-              </Button>
-              <Button
                 href={`/post/${post.id}`}
                 as={Link}
                 color="primary"
@@ -123,8 +95,6 @@ export default function Posts() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
-        title={modalTitle}
-        value={modalValue}
         onChangeValue={modalValueHandler}
       />
     </>

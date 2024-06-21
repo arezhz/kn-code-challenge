@@ -7,19 +7,17 @@ import {
   ModalHeader,
   ModalFooter,
   Button,
-  useDisclosure,
 } from "@nextui-org/react";
 import { useFormik } from "formik";
 import { postMocalSchema } from "./schema/postModal.schema";
 import FormError from "@/components/formError";
 import { IPostModalPropsModel } from "./models/i-post-modal-props.model";
+import { IPostModalValueModel } from "./models/i-post-modal-value.model";
 
 export default function PostModal({
   isOpen,
   onOpenChange,
-  title,
   onClose,
-  value,
   onChangeValue,
 }: IPostModalPropsModel) {
   const closeModal = () => {
@@ -29,19 +27,20 @@ export default function PostModal({
 
   const formik = useFormik({
     initialValues: {
-      title: value ? value.title : "",
-      body: value ? value.body : "",
+      title: "",
+      body: "",
     },
     enableReinitialize: true,
     validateOnBlur: true,
     validationSchema: postMocalSchema,
-    onSubmit: async (values) => {
-      onChangeValue(values);
+    onSubmit: async (values: IPostModalValueModel) => {
+      onChangeValue({
+        userId: 1,
+        ...values,
+      });
       closeModal();
     },
   });
-
-  //   const { onClose} = useDisclosure();
   const { errors, touched, values, handleChange, handleSubmit, handleBlur } =
     formik;
   return (
@@ -49,7 +48,7 @@ export default function PostModal({
       <ModalContent>
         {() => (
           <>
-            <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">New Post</ModalHeader>
             <form onSubmit={handleSubmit} onBlur={handleBlur}>
               <ModalBody>
                 <Input
