@@ -4,7 +4,7 @@ import { getPost } from "../services/post-api.service";
 
 export default function PostDetails({ params }: { params: { slug: string } }) {
   const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["postDetails"],
     queryFn: () => getPost(Number(params.slug)),
   });
   if (isLoading) {
