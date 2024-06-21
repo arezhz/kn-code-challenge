@@ -27,11 +27,6 @@ export default class Interceptors {
         return response;
       },
       async (error: any) => {
-        if (error.response.status && error.response.status === 404) {
-          return { 
-            notFound: true 
-        };
-        }
         return Promise.reject(error);
       }
     );

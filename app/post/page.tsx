@@ -43,6 +43,7 @@ export default function Posts() {
   };
 
   if (isError) {
+    debugger
     return <div> {error.message}:ارور</div>;
   }
   return (
