@@ -4,6 +4,7 @@ import { getPostData } from "./services/post-api.service";
 import NextImage from "next/image";
 import styles from "./styles.module.css";
 import EditSvg from "@/public/edit.svg";
+import type { PressEvent } from "@react-types/shared";
 import VisibilitySvg from "@/public/visibility.svg";
 import AddSvg from "@/public/add.svg";
 import {
@@ -18,13 +19,32 @@ import {
 } from "@nextui-org/react";
 import { IPostModel } from "./models/i-post.model";
 import PostModal from "./postModal";
+import { useState } from "react";
+import { IPostModalValueModel } from "./models/i-post-modal-value.model";
 
 export default function Posts() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [modalTitle, setModalTitle] = useState<string>("");
+  const [modalValue, setModalValue] = useState<IPostModel>();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["posts"],
     queryFn: getPostData,
   });
+
+  const openModalHandler = (
+    e: PressEvent,
+    editMode = false,
+    post?: IPostModel
+  ) => {
+    setModalTitle(editMode ? "Edit Post" : "New Post");
+    setModalValue(post || undefined);
+    onOpen();
+  };
+
+  const modalValueHandler = (values: IPostModalValueModel) => {
+    debugger;
+  };
+
   if (isLoading) {
     return <div>در حال دریافت اطلاعات...</div>;
   }
@@ -35,7 +55,12 @@ export default function Posts() {
     <>
       <section className="flex justify-between items-center">
         <h1 className="text-3xl">Posts</h1>
-        <Button color="primary" isIconOnly variant="solid" onPress={onOpen}>
+        <Button
+          color="primary"
+          isIconOnly
+          variant="solid"
+          onPress={openModalHandler}
+        >
           <Image
             as={NextImage}
             alt="nextui logo"
@@ -63,6 +88,7 @@ export default function Posts() {
                 variant="bordered"
                 isIconOnly
                 aria-label="edit"
+                onPress={(e) => openModalHandler(e, true, post)}
               >
                 <Image
                   as={NextImage}
@@ -93,7 +119,14 @@ export default function Posts() {
           </Card>
         ))}
       </section>
-      <PostModal isOpen={isOpen} onOpenChange={onOpenChange} />
+      <PostModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onClose={onClose}
+        title={modalTitle}
+        value={modalValue}
+        onChangeValue={modalValueHandler}
+      />
     </>
   );
 }
