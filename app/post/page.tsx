@@ -14,10 +14,13 @@ import {
   Divider,
   Link,
   Image,
+  useDisclosure,
 } from "@nextui-org/react";
 import { IPostModel } from "./models/i-post.model";
+import PostModal from "./postModal";
 
 export default function Posts() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["posts"],
     queryFn: getPostData,
@@ -32,7 +35,7 @@ export default function Posts() {
     <>
       <section className="flex justify-between items-center">
         <h1 className="text-3xl">Posts</h1>
-        <Button color="primary" isIconOnly variant="solid">
+        <Button color="primary" isIconOnly variant="solid" onPress={onOpen}>
           <Image
             as={NextImage}
             alt="nextui logo"
@@ -90,6 +93,7 @@ export default function Posts() {
           </Card>
         ))}
       </section>
+      <PostModal isOpen={isOpen} onOpenChange={onOpenChange} />
     </>
   );
 }
