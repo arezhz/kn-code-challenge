@@ -6,7 +6,7 @@ export async function getPostData(): Promise<IPostModel[]> {
 }
 
 export async function getPost(id: number): Promise<IPostModel> {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/888`);
   return await res.json();
 }
 

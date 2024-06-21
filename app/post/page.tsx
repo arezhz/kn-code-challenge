@@ -35,16 +35,13 @@ export default function Posts() {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
     onError: () => {
-      toast.error("An unexpected error occurred");
+      toast.error("Something went wrong!");
     },
   });
   const modalValueHandler = (values: IPostModel) => {
     mutation.mutate(values);
   };
 
-  // if (isLoading) {
-  //   return <div>در حال دریافت اطلاعات...</div>;
-  // }
   if (isError) {
     return <div> {error.message}:ارور</div>;
   }
