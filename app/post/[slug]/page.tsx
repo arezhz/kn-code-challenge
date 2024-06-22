@@ -1,18 +1,26 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { getPost } from "../services/post-api.service";
 import { Button, Image, Divider, Link } from "@nextui-org/react";
 import ArrowBackSvg from "@/public/arrow_back.svg";
 import NextImage from "next/image";
 import PostDetailsSkeletonLoading from "./postDetailsSkeletonLoading";
+import { IPostModel } from "../models/i-post.model";
+import { AxiosError } from "axios";
+import Error from "@/app/error";
 
 export default function PostDetails({ params }: { params: { slug: string } }) {
-  const { isLoading, isError, error, data } = useQuery({
+  const {
+    isLoading,
+    isError,
+    error,
+    data,
+  }: UseQueryResult<IPostModel, AxiosError<unknown, any>> = useQuery({
     queryKey: ["postDetails"],
     queryFn: () => getPost(Number(params.slug)),
   });
   if (isError) {
-    return <div> {error.message}:ارور</div>;
+    return <Error error={error} />;
   }
   return (
     <>

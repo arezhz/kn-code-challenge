@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 
 export default class Interceptors {
   private serverUrl = `https://jsonplaceholder.typicode.com/`;
@@ -17,7 +17,7 @@ export default class Interceptors {
         const requestConfig = { ...config };
         return requestConfig as any;
       },
-      (error: any) => {
+      (error: AxiosError) => {
         return Promise.reject(error);
       }
     );
@@ -26,7 +26,7 @@ export default class Interceptors {
       (response: AxiosResponse<any>) => {
         return response;
       },
-      async (error: any) => {
+      async (error: AxiosError) => {
         return Promise.reject(error);
       }
     );

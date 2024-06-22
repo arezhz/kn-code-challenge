@@ -1,5 +1,5 @@
 "use client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
 import { createNewPost, getPostData } from "./services/post-api.service";
 import NextImage from "next/image";
 import styles from "./styles.module.css";
@@ -18,12 +18,19 @@ import {
 import { IPostModel } from "./models/i-post.model";
 import PostModal from "./postModal";
 import { toast } from "react-toastify";
-import PostSkeletonLoading from "./services/postSkeletonLoading";
+import PostSkeletonLoading from "./postSkeletonLoading";
+import Error from "@/app/error";
+import { AxiosError } from "axios";
 
 export default function Posts() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const queryClient = useQueryClient();
-  const { isLoading, isError, error, data } = useQuery({
+  const {
+    isLoading,
+    isError,
+    error,
+    data,
+  }: UseQueryResult<IPostModel[], AxiosError<unknown, any>> = useQuery({
     queryKey: ["posts"],
     queryFn: getPostData,
   });
@@ -43,8 +50,7 @@ export default function Posts() {
   };
 
   if (isError) {
-    debugger
-    return <div> {error.message}:ارور</div>;
+    return <Error error={error} />;
   }
   return (
     <>
