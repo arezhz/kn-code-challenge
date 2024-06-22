@@ -1,5 +1,9 @@
 "use client";
-import { useMutation, useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  UseQueryResult,
+} from "@tanstack/react-query";
 import { createNewPost, getPostData } from "./services/post-api.service";
 import NextImage from "next/image";
 import styles from "./styles.module.css";
@@ -21,25 +25,24 @@ import { toast } from "react-toastify";
 import PostSkeletonLoading from "./postSkeletonLoading";
 import Error from "@/app/error";
 import { AxiosError } from "axios";
+import { usePostHook } from "./hooks/post.hook";
 
 export default function Posts() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
+
   const {
     isLoading,
     isError,
     error,
     data,
-  }: UseQueryResult<IPostModel[], AxiosError<unknown, any>> = useQuery({
-    queryKey: ["posts"],
-    queryFn: getPostData,
-  });
+  }: UseQueryResult<IPostModel[], AxiosError<unknown, any>> = usePostHook()
 
   const mutation = useMutation({
     mutationFn: createNewPost,
     onSuccess: () => {
       toast.success("Mission accomplished");
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      // queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
     onError: () => {
       toast.error("Something went wrong!");
@@ -50,6 +53,7 @@ export default function Posts() {
   };
 
   if (isError) {
+    debugger
     return <Error error={error} />;
   }
   return (
