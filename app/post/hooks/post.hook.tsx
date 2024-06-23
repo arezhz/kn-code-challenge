@@ -1,14 +1,29 @@
-import { useQuery, UseQueryResult } from "@tanstack/react-query";
-import { getPostData } from "../services/post-api.service";
+import { useMutation, UseMutationResult, useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
+import { createNewPost, getPostData } from "../services/post-api.service";
 import { AxiosError } from "axios";
 import { IPostModel } from "../models/i-post.model";
+import { toast } from "react-toastify";
 
-export function usePostHook(): UseQueryResult<
+export function useGetPostsHook(): UseQueryResult<
   IPostModel[],
   AxiosError<unknown, any>
 > {
   return useQuery({
     queryKey: ["posts"],
     queryFn: getPostData,
+  });
+}
+
+export function useMutationPostHook(): UseMutationResult<IPostModel, Error, IPostModel, unknown> {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: createNewPost,
+    onSuccess: () => {
+      toast.success("Mission accomplished");
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
+    },
+    onError: () => {
+      toast.error("Something went wrong!");
+    },
   });
 }

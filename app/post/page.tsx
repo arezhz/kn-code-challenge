@@ -25,35 +25,26 @@ import { toast } from "react-toastify";
 import PostSkeletonLoading from "./postSkeletonLoading";
 import Error from "@/app/error";
 import { AxiosError } from "axios";
-import { usePostHook } from "./hooks/post.hook";
+import { useGetPostsHook, useMutationPostHook } from "./hooks/post.hook";
 
 export default function Posts() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const queryClient = useQueryClient();
+  
 
   const {
     isLoading,
     isError,
     error,
     data,
-  }: UseQueryResult<IPostModel[], AxiosError<unknown, any>> = usePostHook();
+  }: UseQueryResult<IPostModel[], AxiosError<unknown, any>> = useGetPostsHook();
 
-  const mutation = useMutation({
-    mutationFn: createNewPost,
-    onSuccess: () => {
-      toast.success("Mission accomplished");
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-    },
-    onError: () => {
-      toast.error("Something went wrong!");
-    },
-  });
+  const mutation = useMutationPostHook();
+  
   const modalValueHandler = (values: IPostModel) => {
     mutation.mutate(values);
   };
 
   if (isError) {
-    debugger;
     return <Error error={error} />;
   }
   return (
