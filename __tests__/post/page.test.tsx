@@ -7,7 +7,6 @@ import {
   useGetPostsHook,
   useMutationPostHook,
 } from "@/app/post/hooks/post.hook";
-import { log } from "console";
 
 describe("Post page test wrapper", () => {
   test("isSuccess ['posts'] queryKey", async () => {
@@ -18,7 +17,7 @@ describe("Post page test wrapper", () => {
     await waitFor(() => expect(result.current.data![0].id).toBe(1));
   });
 
-  test("display posts page", async () => {
+  test("display posts page",  () => {
     render(
       <ReactQueryProvider>
         <Post />
@@ -28,7 +27,7 @@ describe("Post page test wrapper", () => {
     expect(heading).toHaveTextContent("Posts");
   });
 
-  test("display new post modal", async () => {
+  test("display new post modal",  () => {
     render(
       <ReactQueryProvider>
         <Post />
