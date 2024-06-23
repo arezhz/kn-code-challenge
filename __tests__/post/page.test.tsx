@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import Post from "@/app/post/page";
 import {
   QueryClient,
@@ -19,10 +19,23 @@ describe("Post page test wrapper", () => {
     await waitFor(() => expect(result.current.data![0].id).toBe(1));
   });
 
-  
-  // test("display posts page", async () => {
-  //   render(<Post />);
-  //   const heading = screen.getByRole("heading", { level: 1 });
-  //   expect(heading).toHaveTextContent('Posts');
-  // });
+  test("display posts page", async () => {
+    render(
+      <ReactQueryProvider>
+        <Post />
+      </ReactQueryProvider>
+    );
+    const heading = screen.getByRole("heading", { level: 1 });
+    expect(heading).toHaveTextContent("Posts");
+  });
+
+  test("display new post modal", async () => {
+    render(
+      <ReactQueryProvider>
+        <Post />
+      </ReactQueryProvider>
+    );
+    fireEvent.click(screen.getByTestId("openNewPostModal"));
+    expect(screen.getByText("New Post")).toBeInTheDocument();
+  });
 });

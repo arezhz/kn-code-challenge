@@ -29,20 +29,20 @@ import { usePostHook } from "./hooks/post.hook";
 
 export default function Posts() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   const {
     isLoading,
     isError,
     error,
     data,
-  }: UseQueryResult<IPostModel[], AxiosError<unknown, any>> = usePostHook()
+  }: UseQueryResult<IPostModel[], AxiosError<unknown, any>> = usePostHook();
 
   const mutation = useMutation({
     mutationFn: createNewPost,
     onSuccess: () => {
       toast.success("Mission accomplished");
-      // queryClient.invalidateQueries({ queryKey: ["posts"] });
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
     },
     onError: () => {
       toast.error("Something went wrong!");
@@ -53,14 +53,20 @@ export default function Posts() {
   };
 
   if (isError) {
-    debugger
+    debugger;
     return <Error error={error} />;
   }
   return (
     <>
       <section className="flex justify-between items-center">
         <h1 className="text-3xl">Posts</h1>
-        <Button color="primary" isIconOnly variant="solid" onPress={onOpen}>
+        <Button
+          data-testid="openNewPostModal"
+          color="primary"
+          isIconOnly
+          variant="solid"
+          onPress={onOpen}
+        >
           <Image
             as={NextImage}
             alt="nextui logo"
