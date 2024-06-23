@@ -1,18 +1,17 @@
 import "@testing-library/jest-dom";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import Post from "@/app/post/page";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import ReactQueryProvider from "@/providers/reactQueryProvider";
-import { usePostHook } from "@/app/post/hooks/post.hook";
+import {
+  useGetPostsHook,
+  useMutationPostHook,
+} from "@/app/post/hooks/post.hook";
+import { log } from "console";
 
 describe("Post page test wrapper", () => {
   test("isSuccess ['posts'] queryKey", async () => {
-    const { result } = renderHook(() => usePostHook(), {
+    const { result } = renderHook(() => useGetPostsHook(), {
       wrapper: ReactQueryProvider,
     });
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
@@ -37,5 +36,20 @@ describe("Post page test wrapper", () => {
     );
     fireEvent.click(screen.getByTestId("openNewPostModal"));
     expect(screen.getByText("New Post")).toBeInTheDocument();
+  });
+
+  test("mutation new post", async () => {
+    const { result } = renderHook(() => useMutationPostHook(), {
+      wrapper: ReactQueryProvider,
+    });
+    act(() => {
+      result.current.mutate({
+        title: "foo",
+        body: "bar",
+        userId: 1,
+      });
+    });
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
   });
 });

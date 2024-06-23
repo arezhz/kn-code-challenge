@@ -1,10 +1,5 @@
 "use client";
-import {
-  useMutation,
-  useQueryClient,
-  UseQueryResult,
-} from "@tanstack/react-query";
-import { createNewPost, getPostData } from "./services/post-api.service";
+import { UseQueryResult } from "@tanstack/react-query";
 import NextImage from "next/image";
 import styles from "./styles.module.css";
 import VisibilitySvg from "@/public/visibility.svg";
@@ -21,7 +16,6 @@ import {
 } from "@nextui-org/react";
 import { IPostModel } from "./models/i-post.model";
 import PostModal from "./postModal";
-import { toast } from "react-toastify";
 import PostSkeletonLoading from "./postSkeletonLoading";
 import Error from "@/app/error";
 import { AxiosError } from "axios";
@@ -29,7 +23,6 @@ import { useGetPostsHook, useMutationPostHook } from "./hooks/post.hook";
 
 export default function Posts() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  
 
   const {
     isLoading,
@@ -39,7 +32,7 @@ export default function Posts() {
   }: UseQueryResult<IPostModel[], AxiosError<unknown, any>> = useGetPostsHook();
 
   const mutation = useMutationPostHook();
-  
+
   const modalValueHandler = (values: IPostModel) => {
     mutation.mutate(values);
   };
