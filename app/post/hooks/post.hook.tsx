@@ -1,5 +1,15 @@
-import { useMutation, UseMutationResult, useQuery, useQueryClient, UseQueryResult } from "@tanstack/react-query";
-import { createNewPost, getPostData } from "../services/post-api.service";
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from "@tanstack/react-query";
+import {
+  createNewPost,
+  getPost,
+  getPostData,
+} from "../services/post-api.service";
 import { AxiosError } from "axios";
 import { IPostModel } from "../models/i-post.model";
 import { toast } from "react-toastify";
@@ -13,8 +23,21 @@ export function useGetPostsHook(): UseQueryResult<
     queryFn: getPostData,
   });
 }
+export function useGetPostDetailsHook(
+  param: string
+): UseQueryResult<IPostModel, AxiosError<unknown, any>> {
+  return useQuery({
+    queryKey: ["postDetails"],
+    queryFn: () => getPost(Number(param)),
+  });
+}
 
-export function useMutationPostHook(): UseMutationResult<IPostModel, Error, IPostModel, unknown> {
+export function useMutationPostHook(): UseMutationResult<
+  IPostModel,
+  Error,
+  IPostModel,
+  unknown
+> {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createNewPost,

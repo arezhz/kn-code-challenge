@@ -8,6 +8,7 @@ import PostDetailsSkeletonLoading from "./postDetailsSkeletonLoading";
 import { IPostModel } from "../models/i-post.model";
 import { AxiosError } from "axios";
 import Error from "@/app/error";
+import { useGetPostDetailsHook } from "../hooks/post.hook";
 
 export default function PostDetails({ params }: { params: { slug: string } }) {
   const {
@@ -15,10 +16,7 @@ export default function PostDetails({ params }: { params: { slug: string } }) {
     isError,
     error,
     data,
-  }: UseQueryResult<IPostModel, AxiosError<unknown, any>> = useQuery({
-    queryKey: ["postDetails"],
-    queryFn: () => getPost(Number(params.slug)),
-  });
+  }: UseQueryResult<IPostModel, AxiosError<unknown, any>> = useGetPostDetailsHook(params.slug)
   if (isError) {
     return <Error error={error} />;
   }

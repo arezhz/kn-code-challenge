@@ -33,7 +33,7 @@ describe("Post modal test wrapper", () => {
     expect(screen.getByTestId("postModalSubmitBtn")).toBeInTheDocument();
   });
 
-  test("display post modal page", async () => {
+  test("post modal form", async () => {
     const handleSubmit = jest.fn();
     render(
       <ReactQueryProvider>
