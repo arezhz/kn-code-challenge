@@ -59,6 +59,7 @@ export default function PostModal({
                   placeholder="Enter your post title"
                   variant="bordered"
                   onChange={handleChange}
+                  data-testid="postModalTitleTextbox"
                 />
                 {touched.title && errors.title && (
                   <FormError error={errors.title} />
@@ -70,6 +71,7 @@ export default function PostModal({
                   variant="bordered"
                   value={values.body}
                   onChange={handleChange}
+                  data-testid="postModalBodyTextbox"
                 />
                 {touched.body && errors.body && (
                   <FormError error={errors.body} />
@@ -80,6 +82,7 @@ export default function PostModal({
                   Close
                 </Button>
                 <Button
+                  data-testid="postModalSubmitBtn"
                   color="primary"
                   isDisabled={!formik.isValid}
                   type="submit"
